@@ -84,3 +84,5 @@ data$date_fin_previsible_frigo <- NULL
 data$apl[data$apl < 5] <- "inconnu"
 
 data$allocation_familiale[data$allocation_familiale < 10] <- "inconnu"
+
+save(data, file = "data_nouveau.RData")
