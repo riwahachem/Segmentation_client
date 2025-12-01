@@ -69,3 +69,8 @@ data_refus_sans_dette <- data_refus_sans_dette %>% distinct()
 # DONNÉES MANQUANTES TABLE REFUS AVEC DETTES
 
 # DONNÉES MANQUANTES TABLE REFUS SANS DETTES
+
+save(data_accord, file = "Data_Cleaning/data_accord.RData")
+save(data_frigo, file = "Data_Cleaning/data_frigo.RData")
+save(data_refus_dette, file = "Data_Cleaning/data_refus_dette.RData")
+save(data_refus_sans_dette, file = "Data_Cleaning/data_refus_sans_dette.RData")
