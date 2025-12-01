@@ -25,8 +25,8 @@ data <- data %>%
     age_coemprunteur = ifelse(age_coemprunteur < 18 | age_coemprunteur > 90, "inconnu", age_coemprunteur)
   )%>%
   select(-date_creation, -emprunteur_date_naissance, -coemprunteur_date_naissance)
-data$age_emprunteur = as.integer(data$age_emprunteur)
-data$age_coemprunteur = as.integer(data$age_coemprunteur)
+#data$age_emprunteur = as.integer(data$age_emprunteur)
+#data$age_coemprunteur = as.integer(data$age_coemprunteur)
 
 data$est_refuse <- ifelse(is.na(data$date_refus), 0, 1)
 data$date_refus <- NULL
