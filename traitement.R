@@ -25,6 +25,8 @@ data <- data %>%
     age_coemprunteur = ifelse(age_coemprunteur < 18 | age_coemprunteur > 90, "inconnu", age_coemprunteur)
   )%>%
   select(-date_creation, -emprunteur_date_naissance, -coemprunteur_date_naissance)
+data$age_emprunteur = as.integer(data$age_emprunteur)
+data$age_coemprunteur = as.integer(data$age_coemprunteur)
 
 data$est_refuse <- ifelse(is.na(data$date_refus), 0, 1)
 data$date_refus <- NULL
@@ -38,23 +40,21 @@ data$date_premier_accord <- NULL
 data <- data %>%
   mutate(
     est_conteste = case_when(
-      # 1 : deux dates présentes ET contestation après refus
+      # deux dates présentes ET contestation après refus
       !is.na(date_min_refus_banque) & !is.na(date_contestation) &
-        date_contestation > date_min_refus_banque ~ "1",
+        date_contestation > date_min_refus_banque ~ "conteste",
       
-      # 0 : refus présent mais pas de contestation
-      !is.na(date_min_refus_banque) & is.na(date_contestation) ~ "0",
+      # refus présent mais pas de contestation
+      !is.na(date_min_refus_banque) & is.na(date_contestation) ~ "pas conteste",
       
-      # "inconnu" : aucune des deux dates
-      is.na(date_min_refus_banque) & is.na(date_contestation) ~ "inconnu",
+      # aucune des deux dates
+      is.na(date_min_refus_banque) & is.na(date_contestation) ~ NA_character_,
       
-      # NA : contestation présente mais pas de refus
-      is.na(date_min_refus_banque) & !is.na(date_contestation) ~ NA_character_
+      # contestation présente mais pas de refus
+      is.na(date_min_refus_banque) & !is.na(date_contestation) ~ "inconnu"
     )
   )
 data <- data %>% select(-date_min_refus_banque, -date_contestation)
-
-data$est_conteste <- factor(data$est_conteste, levels = c("0","1","inconnu"))
 
 data$est_encaisse <- ifelse(is.na(data$date_encaissement_commercial), 0, 1)
 data$date_encaissement_commercial <- NULL
@@ -62,21 +62,16 @@ data$date_encaissement_commercial <- NULL
 data <- data %>%
   mutate(
     retour_bfc = case_when(
-      # 1 : envoi + réception
-      (!is.na(date_envoi_bfc) & !is.na(date_reception_bfc)) | (!is.na(date_envoi_bfc) & !is.na(date_potentiel)) ~ "1",
+      (!is.na(date_envoi_bfc) & !is.na(date_reception_bfc)) | (!is.na(date_envoi_bfc) & !is.na(date_potentiel)) ~ "envoi et retour",
       
-      # 0 : envoi mais pas de réception
-      !is.na(date_envoi_bfc) &  is.na(date_reception_bfc) & is.na(date_potentiel) ~ "0",
+      !is.na(date_envoi_bfc) &  is.na(date_reception_bfc) & is.na(date_potentiel) ~ "envoi et pas de retour",
       
-      # "inconnu" : rien envoyé, rien reçu
-      is.na(date_envoi_bfc)  &  is.na(date_reception_bfc) & is.na(date_potentiel) ~ "inconnu",
+      is.na(date_envoi_bfc)  &  is.na(date_reception_bfc) & is.na(date_potentiel) ~ "pas d'envoi",
       
-      # NA : retour mais pas d'envoi
-      is.na(date_envoi_bfc)  & (is.na(date_reception_bfc) | is.na(date_potentiel)) ~ NA_character_
+      is.na(date_envoi_bfc)  & (is.na(date_reception_bfc) | is.na(date_potentiel)) ~ "inconnu"
     )
   )
 data <- data %>% select(-date_envoi_bfc, -date_reception_bfc, -date_potentiel)
-data$retour_bfc <- factor(data$retour_bfc, levels = c("0","1","inconnu"))
 
 data$est_frigo <- ifelse(is.na(data$date_fin_previsible_frigo), 0, 1)
 data$date_fin_previsible_frigo <- NULL

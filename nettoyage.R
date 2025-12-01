@@ -68,7 +68,7 @@ cols_autres <- c(
   "pret_immo_crd_all", "pret_immo_crd", "etat_premier_rdv","categorie_relance", "date_heure_accord_banque",
   "emprunteur_status_renonciation", "coemprunteur_status_renonciation", "emprunteur_quotite_renonciation",
   "coemprunteur_quotite_renonciation", "last_etat_depot", "last_etat_depot_notaire", "etat_epargne",
-  "etat_rdv_signature_op", "etat_epargne_refus"
+  "etat_rdv_signature_op", "etat_epargne_refus", "type_support"
 )
 
 # Colonnes assurances
