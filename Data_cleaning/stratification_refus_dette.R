@@ -4,7 +4,8 @@ load("Data_Cleaning/data_nouveau.RData")
 data_accord = data[data$status == "encaisse",]
 donnees_manquantes_a <- colSums(is.na(data_accord)) / nrow(data_accord) * 100
 lapply(data_accord, unique)
-data_accord = subset(data_accord, select=-c(status,motif_refus,premier_rdv_realise,est_refuse,banque_accord,est_encaisse))
+data_accord = subset(data_accord, select=-c(status,motif_refus,premier_rdv_realise,est_refuse,banque_accord,est_encaisse,est_frigo))
+data_accord <- data_accord %>% distinct()
 # status : encaisse
 # motif_refus : NA
 # dette_retard_loyer : que 1 : 1996 et que des : 0 ou NA
@@ -16,7 +17,8 @@ data_accord = subset(data_accord, select=-c(status,motif_refus,premier_rdv_reali
 data_frigo = data[data$status == "frigo",]
 donnees_manquantes_f <- colSums(is.na(data_frigo)) / nrow(data_frigo) * 100
 lapply(data_frigo, unique)
-data_frigo = subset(data_frigo, select=-c(status,reserve_levee,dette_retard_loyer,etude_partagee,premier_rdv_realise,rdv_notaire,est_encaisse))
+data_frigo = subset(data_frigo, select=-c(status,reserve_levee,dette_retard_loyer,etude_partagee,premier_rdv_realise,rdv_notaire,est_encaisse,est_frigo))
+data_frigo <- data_frigo %>% distinct()
 # status : frigo
 # motif_refus : Refus CF après 1e rendez vous ou NA
 # scoring : FRIGO ou NA
@@ -33,12 +35,13 @@ data_frigo = subset(data_frigo, select=-c(status,reserve_levee,dette_retard_loye
 data_refus <- data %>% filter(!status %in% c("encaisse", "frigo"))
 donnees_manquantes_r <- colSums(is.na(data_refus)) / nrow(data_refus) * 100
 lapply(data_refus, unique)
-data_refus = subset(data_refus, select=-c(est_encaisse))
+data_refus = subset(data_refus, select=-c(est_encaisse, est_refuse, est_frigo))
 # est_encaisse : 0
 
 data_refus_dette <- data_refus[!is.na(data_refus$dette_famille_ami), ]
 donnees_manquantes_r1 <- colSums(is.na(data_refus_dette)) / nrow(data_refus_dette) * 100
 lapply(data_refus_dette, unique)
+data_refus_dette <- data_refus_dette %>% distinct()
 
 data_refus_sans_dette <- data_refus[is.na(data_refus$dette_famille_ami), ]
 donnees_manquantes_r2 <- colSums(is.na(data_refus_sans_dette)) / nrow(data_refus_sans_dette) * 100
@@ -48,6 +51,7 @@ data_refus_sans_dette = subset(data_refus_sans_dette, select=-c(dette_retard_loy
                                                                 dette_autre, dette_saisie_sur_salire,
                                                                 avis_a_tiers_detenteurs, risque_delai,
                                                                 transfert_paa_status))
+data_refus_sans_dette <- data_refus_sans_dette %>% distinct()
 # type_garantie : NA ou SGAR
 # part_immo : NA ou 0
 # reserve_levee : NA ou N

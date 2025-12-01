@@ -73,7 +73,10 @@ data <- data %>%
   )
 data <- data %>% select(-date_envoi_bfc, -date_reception_bfc, -date_potentiel)
 
-data$est_frigo <- ifelse(is.na(data$date_fin_previsible_frigo), 0, 1)
+data$est_frigo <- ifelse(
+  is.na(data$date_fin_previsible_frigo), 0,
+  ifelse(data$date_fin_previsible_frigo < as.Date("2025-11-01"), 0, 1)
+)
 data$date_fin_previsible_frigo <- NULL
 
 data$apl[data$apl < 5] <- "inconnu"
@@ -113,12 +116,12 @@ data$est_refuse = as.factor(data$est_refuse)
 data$banque_accord = as.factor(data$banque_accord)
 data$est_conteste = as.factor(data$est_conteste)
 data$est_encaisse = as.factor(data$est_encaisse)
-data$retour_bfc = as.factor(data$retour_bfc)
 data$pret_conso_conserve = as.factor(data$pret_conso_conserve)
 data$pret_immo_conserver = as.factor(data$pret_immo_conserver)
 data$etude_partagee = as.factor(data$etude_partagee)
 data$dossier_a_risque= as.factor(data$dossier_a_risque)
 data$risque_delai= as.factor(data$risque_delai)
+data$premier_rdv_realise = as.factor(data$premier_rdv_realise)
 
 
 #data$taux_offre = as.numeric(data$taux_offre)
