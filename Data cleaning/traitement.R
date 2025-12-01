@@ -1,7 +1,7 @@
 library(dplyr)
 library(lubridate)
 
-load("data.RData")
+load("Data Cleaning/data.RData")
 
 data$montant[data$montant < 12000] <- "inconnu"
 
@@ -80,4 +80,4 @@ data$apl[data$apl < 5] <- "inconnu"
 
 data$allocation_familiale[data$allocation_familiale < 10] <- "inconnu"
 
-save(data, file = "data_nouveau.RData")
+save(data, file = "Data Cleaning/data_nouveau.RData")

@@ -1,4 +1,4 @@
-load("new_data")
+load("Data Cleaning/new_data")
 data_de_base = data_to_umontpellier
 rm(data_to_umontpellier)
 
@@ -90,4 +90,4 @@ cols_a_supprimer <- c(
 
 data <- data %>% select(-all_of(cols_a_supprimer))
 
-save(data, file = "data.RData")
+save(data, file = "Data Cleaning/data.RData")

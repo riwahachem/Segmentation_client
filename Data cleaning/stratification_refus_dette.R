@@ -1,5 +1,5 @@
 library(dplyr)
-load("data_nouveau.RData")
+load("Data Cleaning/data_nouveau.RData")
 
 data_accord = data[data$status == "encaisse",]
 donnees_manquantes_a <- colSums(is.na(data_accord)) / nrow(data_accord) * 100
