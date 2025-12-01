@@ -1,5 +1,5 @@
 library(dplyr)
-load("Data Cleaning/data_nouveau.RData")
+load("Data_Cleaning/data_nouveau.RData")
 
 data_loc = data[data$type_dossier == "locataire",]
 donnees_manquantes_l <- colSums(is.na(data_loc)) / nrow(data_loc) * 100
