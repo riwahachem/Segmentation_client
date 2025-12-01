@@ -80,4 +80,48 @@ data$apl[data$apl < 5] <- "inconnu"
 
 data$allocation_familiale[data$allocation_familiale < 10] <- "inconnu"
 
+data$pret_conso_conserve <- ifelse(
+  data$pret_conso_conserve == "Y", 1,
+  ifelse(data$pret_conso_conserve == "N", 0, "inconnu"))
+
+data$pret_immo_conserver <- ifelse(
+  data$pret_immo_conserver == "Y", 1,
+  ifelse(data$pret_immo_conserver == "N", 0, "inconnu"))
+
+data$reserve_levee <- ifelse(
+  data$reserve_levee == "Y", 1,
+  ifelse(data$reserve_levee == "N", 0, "inconnu"))
+
+data$etude_partagee <- ifelse(
+  data$etude_partagee == "Y", 1,
+  ifelse(data$etude_partagee == "N", 0, "inconnu"))
+
+data$dossier_a_risque <- ifelse(
+  data$dossier_a_risque == "Y", 1,
+  ifelse(data$dossier_a_risque == "N", 0, "inconnu"))
+
+data$risque_delai <- ifelse(
+  data$risque_delai == "Y", 1,
+  ifelse(data$risque_delai == "N", 0, "inconnu"))
+
+data$espace_client_est_valide = as.factor(data$espace_client_est_valide)
+data$est_frigo = as.factor(data$est_frigo)
+data$rdv_notaire = as.factor(data$rdv_notaire)
+data$signature_electronique = as.factor(data$signature_electronique)
+data$reserve_levee = as.factor(data$reserve_levee)
+data$est_refuse = as.factor(data$est_refuse)
+data$banque_accord = as.factor(data$banque_accord)
+data$est_conteste = as.factor(data$est_conteste)
+data$est_encaisse = as.factor(data$est_encaisse)
+data$retour_bfc = as.factor(data$retour_bfc)
+data$pret_conso_conserve = as.factor(data$pret_conso_conserve)
+data$pret_immo_conserver = as.factor(data$pret_immo_conserver)
+data$etude_partagee = as.factor(data$etude_partagee)
+data$dossier_a_risque= as.factor(data$dossier_a_risque)
+data$risque_delai= as.factor(data$risque_delai)
+
+
+#data$taux_offre = as.numeric(data$taux_offre)
+#data$montant = as.numeric(data$montant)
+
 save(data, file = "Data_Cleaning/data_nouveau.RData")
