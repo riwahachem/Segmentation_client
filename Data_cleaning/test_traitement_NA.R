@@ -15,17 +15,24 @@ load("Data_Cleaning/data_refus_sans_dette.RData")
 #                                  "pret_immo_conserver","type_contrat_emprunteur")], m = 1, maxit = 0)
 #stripplot(mice_plot)
 
-data_accord = subset(data_accord, select = -c(agence,prochain_rdv, type_prochain_rdv, prochain_rdv_etat))
-mice = mice(data = data_accord, m=5, method = "pmm", maxit = 5)
+data_accord = subset(data_accord, select = -c(agence,prochain_rdv, type_prochain_rdv, prochain_rdv_etat, cle_unique_tel, cle_unique_mail))
+mice = mice(data = data_accord, m=5, method = "rf", maxit = 5)
 data_accord_impute <- complete(mice, 1)
 
 #FRIGO
 
-data_frigo = subset(data_frigo, select = -c(agence,prochain_rdv, type_prochain_rdv, prochain_rdv_etat))
-mice = mice(data = data_frigo, m=5, method = "pmm", maxit = 5)
+data_frigo = subset(data_frigo, select = -c(agence,prochain_rdv, type_prochain_rdv, prochain_rdv_etat, cle_unique_tel, cle_unique_mail))
+mice = mice(data = data_frigo, m=5, method = "rf", maxit = 5)
 data_frigo_impute <- complete(mice, 1)
 
 #REFUS DETTE
 
+data_refus_dette = subset(data_refus_dette, select = -c(agence,prochain_rdv, type_prochain_rdv, prochain_rdv_etat, cle_unique_tel, cle_unique_mail))
+mice = mice(data = data_refus_dette, m=5, method = "rf", maxit = 5)
+data_refus_dette_impute <- complete(mice, 1)
 
 #REFUS SANS DETTE
+
+data_refus_sans_dette = subset(data_refus_sans_dette, select = -c(agence,prochain_rdv, type_prochain_rdv, prochain_rdv_etat, cle_unique_tel, cle_unique_mail))
+mice = mice(data = data_refus_sans_dette, m=5, method = "rf", maxit = 5)
+data_refus_sans_dette_impute <- complete(mice, 1)

@@ -3,14 +3,17 @@ library(lubridate)
 
 load("Data_Cleaning/data.RData")
 
+# VARIABLES QUANTITATIVES
+
+# VARIABLES QUALITATIVES
+
+data$est_aggregation <- ifelse(is.na(data$est_aggregation), 0, 1)
+
 data$montant[data$montant < 12000] <- NA
 
 data$taux_offre[data$taux_offre > 300] <- NA
 
-data$date_realisation_premier_rdv <- ifelse(is.na(data$date_realisation_premier_rdv), 0, 1)
-data$premier_rdv_realise <- data$date_realisation_premier_rdv
-data$date_realisation_premier_rdv <- NULL
-
+###### voir les 1 qui sont des NA 
 data$signature_electronique <- ifelse(
   data$signature_electronique == "Y", 1,
   ifelse(data$signature_electronique == "N", 0, NA))
@@ -25,8 +28,8 @@ data <- data %>%
     age_coemprunteur = ifelse(age_coemprunteur < 18 | age_coemprunteur > 90, NA, age_coemprunteur)
   )%>%
   select(-date_creation, -emprunteur_date_naissance, -coemprunteur_date_naissance)
-#data$age_emprunteur = as.integer(data$age_emprunteur)
-#data$age_coemprunteur = as.integer(data$age_coemprunteur)
+data$age_emprunteur = as.integer(data$age_emprunteur)
+data$age_coemprunteur = as.integer(data$age_coemprunteur)
 
 data$est_refuse <- ifelse(is.na(data$date_refus), 0, 1)
 data$date_refus <- NULL
@@ -48,7 +51,7 @@ data <- data %>%
       !is.na(date_min_refus_banque) & is.na(date_contestation) ~ "pas conteste",
       
       # aucune des deux dates
-      is.na(date_min_refus_banque) & is.na(date_contestation) ~ NA_character_,
+      is.na(date_min_refus_banque) & is.na(date_contestation) ~ NA,
       
       # contestation présente mais pas de refus
       is.na(date_min_refus_banque) & !is.na(date_contestation) ~ NA
@@ -121,13 +124,21 @@ data$pret_immo_conserver = as.factor(data$pret_immo_conserver)
 data$etude_partagee = as.factor(data$etude_partagee)
 data$dossier_a_risque= as.factor(data$dossier_a_risque)
 data$risque_delai= as.factor(data$risque_delai)
-data$premier_rdv_realise = as.factor(data$premier_rdv_realise)
 
 data <- data %>%
   mutate(across(where(is.character), as.factor))
 
 data = subset(data, select = -c(nb_doc_espace_client, nb_epargne, nb_pret_conso, nb_pret_immo,
                                 nb_rdv_fait, nb_rdv_pas_fait, est_aggregation))
-#data = data[300000:500000,]
+
+data$dette = rowSums(data[,c("dette_autre","dette_decouvert", "dette_famille_ami", "dette_retard_impot",
+                             "dette_retard_loyer", "dette_saisie_sur_salire", "avis_a_tiers_detenteurs")])
+data$dette <- ifelse(
+  is.na(data$dette), "dette inconnue",
+  ifelse(data$dette==0, "dette a zero", "dette existante")
+)
+
+data = subset(data, select = -c(dette_autre,dette_decouvert, dette_famille_ami, dette_retard_impot,
+                                dette_retard_loyer, dette_saisie_sur_salire, avis_a_tiers_detenteurs))
 
 save(data, file = "Data_Cleaning/data_nouveau.RData")

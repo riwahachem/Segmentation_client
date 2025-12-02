@@ -1,9 +1,15 @@
-load("Data_Cleaning/new_data")
+library(dplyr)
+library(lubridate)
+
+load("Data_cleaning/new_data")
+data0 = data_to_umontpellier
+rm(data_to_umontpellier)
+
+load("Data_cleaning/data_to_umontpellier_new1")
 data_de_base = data_to_umontpellier
 rm(data_to_umontpellier)
 
-library(dplyr)
-library(lubridate)
+data_de_base <- data_de_base[, colnames(data_de_base) %in% colnames(data0)]
 
 data_non_relancer <- data_de_base %>% 
   filter(a_ete_relance == FALSE)
@@ -56,7 +62,7 @@ cols_dates <- c(
   "consultation_doc_espace_client", "mise_a_dispo_espace_client", "date_suivi_max", "date_suivi_J1",
   "date_validation_suivi_J1", "date_dossier_risque", "date_derniere_relation_banque", 
   "date_last_rdv_realise", "date_derniere_relation_emise_client", "date_min_depot_banque",
-  "date_signature_op", "date_depot_banque"
+  "date_signature_op", "date_depot_banque", "prochain_rdv", "prochain_rdv_etat","date_realisation_premier_rdv"
   )
 
 # Colonnes textuelles et autres 
@@ -70,7 +76,7 @@ cols_autres <- c(
   "pret_immo_crd_all", "pret_immo_crd", "etat_premier_rdv","categorie_relance", "date_heure_accord_banque",
   "emprunteur_status_renonciation", "coemprunteur_status_renonciation", "emprunteur_quotite_renonciation",
   "coemprunteur_quotite_renonciation", "last_etat_depot", "last_etat_depot_notaire", "etat_epargne",
-  "etat_rdv_signature_op", "etat_epargne_refus", "type_support"
+  "etat_rdv_signature_op", "etat_epargne_refus", "type_support","type_prochain_rdv"
 )
 
 # Colonnes assurances
