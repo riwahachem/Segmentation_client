@@ -123,6 +123,9 @@ data$dossier_a_risque= as.factor(data$dossier_a_risque)
 data$risque_delai= as.factor(data$risque_delai)
 data$premier_rdv_realise = as.factor(data$premier_rdv_realise)
 
+data <- data %>%
+  mutate(across(where(is.character), as.factor))
+
 data = subset(data, select = -c(nb_doc_espace_client, nb_epargne, nb_pret_conso, nb_pret_immo,
                                 nb_rdv_fait, nb_rdv_pas_fait, est_aggregation))
 #data = data[300000:500000,]

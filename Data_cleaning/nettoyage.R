@@ -10,6 +10,8 @@ data_non_relancer <- data_de_base %>%
 
 data_non_relancer = subset(data_non_relancer, select = -a_ete_relance)
 
+prop_non_relance = nrow(data_non_relancer)/nrow(data_de_base) * 100
+
 data = data_non_relancer
 
 # Retirer status = en cours

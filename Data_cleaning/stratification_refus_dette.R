@@ -8,6 +8,7 @@ data_accord = subset(data_accord, select=-c(status,motif_refus,premier_rdv_reali
 data_accord <- data_accord %>% distinct()
 
 data_accord$dette_retard_loyer <- ifelse(is.na(data_accord$dette_retard_loyer), 0, 1)
+data_accord$retour_bfc <- ifelse(is.na(data_accord$retour_bfc), 0, 1)
 # status : encaisse
 # motif_refus : NA
 # dette_retard_loyer : que 1 : 1996 et que des : 0 ou NA
