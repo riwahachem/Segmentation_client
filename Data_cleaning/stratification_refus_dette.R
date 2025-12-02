@@ -6,6 +6,8 @@ donnees_manquantes_a <- colSums(is.na(data_accord)) / nrow(data_accord) * 100
 lapply(data_accord, unique)
 data_accord = subset(data_accord, select=-c(status,motif_refus,premier_rdv_realise,est_refuse,banque_accord,est_encaisse,est_frigo))
 data_accord <- data_accord %>% distinct()
+
+data_accord$dette_retard_loyer <- ifelse(is.na(data_accord$dette_retard_loyer), 0, 1)
 # status : encaisse
 # motif_refus : NA
 # dette_retard_loyer : que 1 : 1996 et que des : 0 ou NA
@@ -17,8 +19,13 @@ data_accord <- data_accord %>% distinct()
 data_frigo = data[data$status == "frigo",]
 donnees_manquantes_f <- colSums(is.na(data_frigo)) / nrow(data_frigo) * 100
 lapply(data_frigo, unique)
-data_frigo = subset(data_frigo, select=-c(status,reserve_levee,dette_retard_loyer,etude_partagee,premier_rdv_realise,rdv_notaire,est_encaisse,est_frigo))
+data_frigo = subset(data_frigo, select=-c(status,reserve_levee,dette_retard_loyer,etude_partagee,premier_rdv_realise,rdv_notaire,est_encaisse,est_frigo,motif_refus))
 data_frigo <- data_frigo %>% distinct()
+
+data_frigo$scoring <- ifelse(is.na(data_frigo$scoring), 0, 1)
+data_frigo$apl <- ifelse(is.na(data_frigo$apl), 0, 1)
+data_frigo$risque_delai <- ifelse(is.na(data_frigo$risque_delai), 0, 1)
+
 # status : frigo
 # motif_refus : Refus CF après 1e rendez vous ou NA
 # scoring : FRIGO ou NA
@@ -52,6 +59,14 @@ data_refus_sans_dette = subset(data_refus_sans_dette, select=-c(dette_retard_loy
                                                                 avis_a_tiers_detenteurs, risque_delai,
                                                                 transfert_paa_status))
 data_refus_sans_dette <- data_refus_sans_dette %>% distinct()
+
+data_refus_sans_dette$type_garantie <- ifelse(is.na(data_refus_sans_dette$type_garantie), 0, 1)
+data_refus_sans_dette$part_immo <- ifelse(is.na(data_refus_sans_dette$part_immo), 0, 1)
+data_refus_sans_dette$reserve_levee <- ifelse(is.na(data_refus_sans_dette$reserve_levee), 0, 1)
+data_refus_sans_dette$etude_partagee <- ifelse(is.na(data_refus_sans_dette$etude_partagee), 0, 1)
+data_refus_sans_dette$transfert_adp_status <- ifelse(is.na(data_refus_sans_dette$transfert_adp_status), 0, 1)
+
+
 # type_garantie : NA ou SGAR
 # part_immo : NA ou 0
 # reserve_levee : NA ou N
