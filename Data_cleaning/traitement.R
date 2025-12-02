@@ -3,9 +3,9 @@ library(lubridate)
 
 load("Data_Cleaning/data.RData")
 
-data$montant[data$montant < 12000] <- "inconnu"
+data$montant[data$montant < 12000] <- NA
 
-data$taux_offre[data$taux_offre > 300] <- "inconnu"
+data$taux_offre[data$taux_offre > 300] <- NA
 
 data$date_realisation_premier_rdv <- ifelse(is.na(data$date_realisation_premier_rdv), 0, 1)
 data$premier_rdv_realise <- data$date_realisation_premier_rdv
@@ -13,7 +13,7 @@ data$date_realisation_premier_rdv <- NULL
 
 data$signature_electronique <- ifelse(
   data$signature_electronique == "Y", 1,
-  ifelse(data$signature_electronique == "N", 0, "inconnu"))
+  ifelse(data$signature_electronique == "N", 0, NA))
 
 data <- data %>% 
   mutate(
@@ -21,8 +21,8 @@ data <- data %>%
     age_coemprunteur = as.numeric(floor((date_creation - coemprunteur_date_naissance) / 365.25))
   ) %>%
   mutate(
-    age_emprunteur = ifelse(age_emprunteur < 18 | age_emprunteur > 90, "inconnu", age_emprunteur),
-    age_coemprunteur = ifelse(age_coemprunteur < 18 | age_coemprunteur > 90, "inconnu", age_coemprunteur)
+    age_emprunteur = ifelse(age_emprunteur < 18 | age_emprunteur > 90, NA, age_emprunteur),
+    age_coemprunteur = ifelse(age_coemprunteur < 18 | age_coemprunteur > 90, NA, age_coemprunteur)
   )%>%
   select(-date_creation, -emprunteur_date_naissance, -coemprunteur_date_naissance)
 #data$age_emprunteur = as.integer(data$age_emprunteur)
@@ -51,7 +51,7 @@ data <- data %>%
       is.na(date_min_refus_banque) & is.na(date_contestation) ~ NA_character_,
       
       # contestation présente mais pas de refus
-      is.na(date_min_refus_banque) & !is.na(date_contestation) ~ "inconnu"
+      is.na(date_min_refus_banque) & !is.na(date_contestation) ~ NA
     )
   )
 data <- data %>% select(-date_min_refus_banque, -date_contestation)
@@ -68,7 +68,7 @@ data <- data %>%
       
       is.na(date_envoi_bfc)  &  is.na(date_reception_bfc) & is.na(date_potentiel) ~ "pas d'envoi",
       
-      is.na(date_envoi_bfc)  & (is.na(date_reception_bfc) | is.na(date_potentiel)) ~ "inconnu"
+      is.na(date_envoi_bfc)  & (is.na(date_reception_bfc) | is.na(date_potentiel)) ~ NA
     )
   )
 data <- data %>% select(-date_envoi_bfc, -date_reception_bfc, -date_potentiel)
@@ -79,33 +79,33 @@ data$est_frigo <- ifelse(
 )
 data$date_fin_previsible_frigo <- NULL
 
-data$apl[data$apl < 5] <- "inconnu"
+data$apl[data$apl < 5] <- NA
 
-data$allocation_familiale[data$allocation_familiale < 10] <- "inconnu"
+data$allocation_familiale[data$allocation_familiale < 10] <- NA
 
 data$pret_conso_conserve <- ifelse(
   data$pret_conso_conserve == "Y", 1,
-  ifelse(data$pret_conso_conserve == "N", 0, "inconnu"))
+  ifelse(data$pret_conso_conserve == "N", 0, NA))
 
 data$pret_immo_conserver <- ifelse(
   data$pret_immo_conserver == "Y", 1,
-  ifelse(data$pret_immo_conserver == "N", 0, "inconnu"))
+  ifelse(data$pret_immo_conserver == "N", 0, NA))
 
 data$reserve_levee <- ifelse(
   data$reserve_levee == "Y", 1,
-  ifelse(data$reserve_levee == "N", 0, "inconnu"))
+  ifelse(data$reserve_levee == "N", 0, NA))
 
 data$etude_partagee <- ifelse(
   data$etude_partagee == "Y", 1,
-  ifelse(data$etude_partagee == "N", 0, "inconnu"))
+  ifelse(data$etude_partagee == "N", 0, NA))
 
 data$dossier_a_risque <- ifelse(
   data$dossier_a_risque == "Y", 1,
-  ifelse(data$dossier_a_risque == "N", 0, "inconnu"))
+  ifelse(data$dossier_a_risque == "N", 0, NA))
 
 data$risque_delai <- ifelse(
   data$risque_delai == "Y", 1,
-  ifelse(data$risque_delai == "N", 0, "inconnu"))
+  ifelse(data$risque_delai == "N", 0, NA))
 
 data$espace_client_est_valide = as.factor(data$espace_client_est_valide)
 data$est_frigo = as.factor(data$est_frigo)
@@ -123,8 +123,8 @@ data$dossier_a_risque= as.factor(data$dossier_a_risque)
 data$risque_delai= as.factor(data$risque_delai)
 data$premier_rdv_realise = as.factor(data$premier_rdv_realise)
 
-
-#data$taux_offre = as.numeric(data$taux_offre)
-#data$montant = as.numeric(data$montant)
+data = subset(data, select = -c(nb_doc_espace_client, nb_epargne, nb_pret_conso, nb_pret_immo,
+                                nb_rdv_fait, nb_rdv_pas_fait, est_aggregation))
+#data = data[300000:500000,]
 
 save(data, file = "Data_Cleaning/data_nouveau.RData")
