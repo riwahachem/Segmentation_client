@@ -47,6 +47,10 @@ data$est_encaisse <- ifelse(is.na(data$date_encaissement_commercial), 0, 1)
 data$date_encaissement_commercial <- NULL
 data$est_encaisse = as.factor(data$est_encaisse)
 
+data$premier_rdv_realise <- ifelse(is.na(data$date_realisation_premier_rdv), 0, 1)
+data$date_realisation_premier_rdv <- NULL
+data$premier_rdv_realise = as.factor(data$premier_rdv_realise)
+
 data$est_frigo <- ifelse(
   is.na(data$date_fin_previsible_frigo), 0,
   ifelse(data$date_fin_previsible_frigo < as.Date("2025-11-01"), 0, 1)

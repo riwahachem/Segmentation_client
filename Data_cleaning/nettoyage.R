@@ -62,7 +62,7 @@ cols_dates <- c(
   "consultation_doc_espace_client", "mise_a_dispo_espace_client", "date_suivi_max", "date_suivi_J1",
   "date_validation_suivi_J1", "date_dossier_risque", "date_derniere_relation_banque", 
   "date_last_rdv_realise", "date_derniere_relation_emise_client", "date_min_depot_banque",
-  "date_signature_op", "date_depot_banque", "prochain_rdv", "prochain_rdv_etat","date_realisation_premier_rdv"
+  "date_signature_op", "date_depot_banque", "prochain_rdv", "prochain_rdv_etat"
 )
 
 # Colonnes textuelles et autres 
