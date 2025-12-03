@@ -63,7 +63,7 @@ cols_dates <- c(
   "date_validation_suivi_J1", "date_dossier_risque", "date_derniere_relation_banque", 
   "date_last_rdv_realise", "date_derniere_relation_emise_client", "date_min_depot_banque",
   "date_signature_op", "date_depot_banque", "prochain_rdv", "prochain_rdv_etat","date_realisation_premier_rdv"
-  )
+)
 
 # Colonnes textuelles et autres 
 cols_autres <- c(
@@ -99,3 +99,4 @@ cols_a_supprimer <- c(
 data <- data %>% select(-all_of(cols_a_supprimer))
 
 save(data, file = "Data_Cleaning/data.RData")
+save(data_de_base, file = "Data_Cleaning/data_de_base.RData")
