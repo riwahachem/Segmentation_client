@@ -2,11 +2,17 @@ library(mice)
 library(missForest)
 
 load("Data_Cleaning/data_nouveau.RData")
-data = subset(data, select = -c(agence))
+donnees_manquantes <- colSums(is.na(data)) / nrow(data) * 100
+
 miss_forest = missForest(data, variablewise = TRUE)
 data_impute <- miss_forest$ximp
-
 save(data_impute, file = "Data_Cleaning/data_finale.RData")
+
+perf <- data.frame(
+  variable = colnames(data),
+  OOBerror = miss_forest$OOBerror
+)
+
 
 load("Data_Cleaning/data_accord.RData")
 load("Data_Cleaning/data_frigo.RData")
