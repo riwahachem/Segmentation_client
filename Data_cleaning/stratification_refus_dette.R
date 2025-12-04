@@ -101,15 +101,7 @@ data_refus_sans_rdv <- data_refus_sans_rdv %>% distinct()
 data_refus_sans_rdv = subset(data_refus_sans_rdv, select=-c(cle_unique_tel,cle_unique_mail))
 donnees_manquantes_r2 <- colSums(is.na(data_refus_sans_rdv)) / nrow(data_refus_sans_rdv) * 100
 
-
-data_refus_sans_dette$type_garantie <- ifelse(is.na(data_refus_sans_dette$type_garantie), 0, 1)
-data_refus_sans_dette$part_immo <- ifelse(is.na(data_refus_sans_dette$part_immo), 0, 1)
-data_refus_sans_dette$reserve_levee <- ifelse(is.na(data_refus_sans_dette$reserve_levee), 0, 1)
-data_refus_sans_dette$etude_partagee <- ifelse(is.na(data_refus_sans_dette$etude_partagee), 0, 1)
-data_refus_sans_dette$transfert_adp_status <- ifelse(is.na(data_refus_sans_dette$transfert_adp_status), 0, 1)
-
-
 save(data_accord, file = "Data_Cleaning/data_accord.RData")
 save(data_frigo, file = "Data_Cleaning/data_frigo.RData")
-save(data_refus_dette, file = "Data_Cleaning/data_refus_rdv.RData")
-save(data_refus_sans_dette, file = "Data_Cleaning/data_refus_sans_rdv.RData")
+save(data_refus_rdv, file = "Data_Cleaning/data_refus_rdv.RData")
+save(data_refus_sans_rdv, file = "Data_Cleaning/data_refus_sans_rdv.RData")
