@@ -92,17 +92,15 @@ data$espace_client_est_valide = as.factor(data$espace_client_est_valide)
 
 data$signature_electronique <- ifelse(data$banque_accord == 0 & data$signature_electronique == 1, NA, data$signature_electronique)
 
-# VARIABLES QUALITATIVES
-
 data <- data %>%
   mutate(
     est_conteste = case_when(
       # deux dates présentes ET contestation après refus
       !is.na(date_min_refus_banque) & !is.na(date_contestation) &
-        date_contestation > date_min_refus_banque ~ "conteste",
+        date_contestation > date_min_refus_banque ~ 1,
       
       # refus présent mais pas de contestation
-      !is.na(date_min_refus_banque) & is.na(date_contestation) ~ "pas conteste",
+      !is.na(date_min_refus_banque) & is.na(date_contestation) ~ 0,
       
       # aucune des deux dates
       is.na(date_min_refus_banque) & is.na(date_contestation) ~ NA,
@@ -112,6 +110,8 @@ data <- data %>%
     )
   )
 data <- data %>% select(-date_min_refus_banque, -date_contestation)
+
+# VARIABLES QUALITATIVES
 
 data <- data %>%
   mutate(
