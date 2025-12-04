@@ -5,6 +5,10 @@ library(naniar)
 library(UpSetR)
 library(ggplot2)
 
+gg_miss_fct(x = data, fct = type_dossier)
+gg_miss_fct(x = data, fct = status)
+gg_miss_fct(x = data, fct = premier_rdv_realise)
+
 #ACCORD 
 
 vis_miss(data_accord, warn_large_data = FALSE)
