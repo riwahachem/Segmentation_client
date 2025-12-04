@@ -140,4 +140,7 @@ data$dette <- ifelse(
 data <- data %>%
   mutate(across(where(is.character), as.factor))
 
+data <- data %>% distinct()
+data = subset(data, select = -c(cle_unique_mail, cle_unique_tel))
+
 save(data, file = "Data_Cleaning/data_nouveau.RData")
