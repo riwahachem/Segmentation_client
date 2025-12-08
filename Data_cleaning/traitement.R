@@ -5,6 +5,7 @@ load("Data_Cleaning/data.RData")
 
 # VARIABLES QUANTITATIVES
 data$est_aggregation <- ifelse(is.na(data$est_aggregation), 0, 1)
+data$est_aggregation = as.factor(data$est_aggregation)
 
 data$montant[data$montant < 12000] <- NA
 data$taux_offre[data$taux_offre > 300] <- NA
@@ -24,12 +25,18 @@ data <- data %>%
 data$age_emprunteur = as.integer(data$age_emprunteur)
 data$age_coemprunteur = as.integer(data$age_coemprunteur)
 
+data$nb_epargne = as.integer(data$nb_epargne)
+data$nb_pret_conso = as.integer(data$nb_pret_conso)
+data$nb_pret_immo = as.integer(data$nb_pret_immo)
+data$nb_doc_espace_client = as.integer(data$nb_doc_espace_client)
+data$nb_rdv_fait = as.integer(data$nb_rdv_fait)
+data$nb_rdv_pas_fait = as.integer(data$nb_rdv_pas_fait)
+
 # VARIABLES FACTORIELLES
 
 data$signature_electronique <- ifelse(
   data$signature_electronique == "Y", 1,
   ifelse(data$signature_electronique == "N", 0, NA))
-data$signature_electronique = as.factor(data$signature_electronique)
 
 data$est_refuse <- ifelse(is.na(data$date_refus), 0, 1)
 data$date_refus <- NULL
@@ -91,6 +98,7 @@ data$risque_delai= as.factor(data$risque_delai)
 data$espace_client_est_valide = as.factor(data$espace_client_est_valide)
 
 data$signature_electronique <- ifelse(data$banque_accord == 0 & data$signature_electronique == 1, NA, data$signature_electronique)
+data$signature_electronique = as.factor(data$signature_electronique)
 
 data <- data %>%
   mutate(
@@ -110,6 +118,7 @@ data <- data %>%
     )
   )
 data <- data %>% select(-date_min_refus_banque, -date_contestation)
+data$est_conteste = as.factor(data$est_conteste)
 
 # VARIABLES QUALITATIVES
 
