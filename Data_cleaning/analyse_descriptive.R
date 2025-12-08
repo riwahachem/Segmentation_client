@@ -74,10 +74,24 @@ ggplot(data, aes(x = pret_conso_conserve, fill = type_dossier)) +
        y = "Conservation des prêts") +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
+#Statistiques descriptives à afficher dans le rapport
 
-ggplot(data, aes(x = type_dossier, fill = situation_familliale_emprunteur)) +
-  geom_bar(position = "dodge") +
-  labs(title = "Type de dossier selon la situation familiale de l'emprunteur",
+ggplot(data, aes(x = type_dossier, fill = dette)) +
+  geom_bar(position = "fill") +
+  labs(x = "Type de dossier",
+       y = "Proportion") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+ggplot(data, aes(x = type_dossier, fill = premier_rdv_realise)) +
+  geom_bar(position = "fill") +
+  labs(
        x = "Type de dossier",
-       y = "Nombre") +
+       y = "Proportion") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+ggplot(data, aes(x = premier_rdv_realise, fill = status)) +
+  geom_bar(position = "fill") +
+  labs(
+       x = "Type de dossier",
+       y = "Proportion") +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
