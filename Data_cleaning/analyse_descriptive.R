@@ -1,7 +1,7 @@
 library(dplyr)
 library(ggplot2)
 load("Data_Cleaning/data_de_base.RData")
-load("Data_Cleaning/data.RData")
+load("Data_Cleaning/data_nouveau.RData")
 
 #Statistiques descriptives (variables qualitatives) : 
 
@@ -76,22 +76,27 @@ ggplot(data, aes(x = pret_conso_conserve, fill = type_dossier)) +
 
 #Statistiques descriptives à afficher dans le rapport
 
-ggplot(data, aes(x = type_dossier, fill = dette)) +
+ggplot(data, aes(x = type_dossier, fill =  premier_rdv_realise)) +
   geom_bar(position = "fill") +
-  labs(x = "Type de dossier",
-       y = "Proportion") +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1))
-
-ggplot(data, aes(x = type_dossier, fill = premier_rdv_realise)) +
-  geom_bar(position = "fill") +
+  scale_fill_brewer(palette = "Paired") +
+  theme_minimal(base_size = 14) +
   labs(
        x = "Type de dossier",
        y = "Proportion") +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1, face = "bold"),
+    axis.text.y = element_text(face = "bold"),
+    plot.title = element_text(size = 16, face = "bold"))
+
 
 ggplot(data, aes(x = premier_rdv_realise, fill = status)) +
   geom_bar(position = "fill") +
+  scale_fill_brewer(palette = "Paired") +
+  theme_minimal(base_size = 14) +
   labs(
-       x = "Type de dossier",
+       x = "Réalisation du premier rendez-vous",
        y = "Proportion") +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1, face = "bold"),
+    axis.text.y = element_text(face = "bold"),
+    plot.title = element_text(size = 16, face = "bold"))
