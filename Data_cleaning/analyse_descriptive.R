@@ -81,8 +81,8 @@ ggplot(data, aes(x = type_dossier, fill =  premier_rdv_realise)) +
   scale_fill_brewer(palette = "Paired") +
   theme_minimal(base_size = 14) +
   labs(
-       x = "Type de dossier",
-       y = "Proportion") +
+    x = "Type de dossier",
+    y = "Proportion") +
   theme(
     axis.text.x = element_text(angle = 45, hjust = 1, face = "bold"),
     axis.text.y = element_text(face = "bold"),
@@ -94,8 +94,8 @@ ggplot(data, aes(x = premier_rdv_realise, fill = status)) +
   scale_fill_brewer(palette = "Paired") +
   theme_minimal(base_size = 14) +
   labs(
-       x = "Réalisation du premier rendez-vous",
-       y = "Proportion") +
+    x = "Réalisation du premier rendez-vous",
+    y = "Proportion") +
   theme(
     axis.text.x = element_text(angle = 45, hjust = 1, face = "bold"),
     axis.text.y = element_text(face = "bold"),
