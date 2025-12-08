@@ -12,6 +12,7 @@ library(dbscan)
 library(FactoMineR)
 library(e1071)
 library(clustMixType)
+library(purrr)
 
 ################################################################################
 # Chargement des données + vérification des NA
@@ -56,8 +57,6 @@ data_impute_small <- data_impute[idx, , drop = FALSE]
 
 
 
-
-
 ## ACP 
 ################################################################################
 
@@ -82,7 +81,6 @@ scores_pca <- res_pca$ind$coord  # matrice 10000 x nb comp
 
 # Objectif : apprendre la "forme" du nuage de points et détecter les outliers
 
-set.seed(322)
 
 svm_model <- svm(
   x      = scores_pca,
@@ -156,7 +154,6 @@ idx_inliers <- df_vis$inlier == "TRUE"
 
 scores_inliers <- scores_pca[idx_inliers, , drop = FALSE]
 
-set.seed(456)
 
 # Choix du nombre de clusters
 k <- 3
@@ -194,6 +191,9 @@ ggplot(df_vis, aes(x = PC1, y = PC2)) +
     color = "Cluster (inliers)"
   ) +
   theme_minimal()
+
+
+
 
 
 
@@ -251,8 +251,8 @@ res_kp$size #tailles
 res_kp$centers #centre et var quali les plus fréqquentes
 
 
-data_mix$cluster <- factor(res_kp$cluster)
-
+data_mix$cluster   <- factor(res_kp$cluster)
+data_impute$cluster <- factor(res_kp$cluster)  
 
 
 
@@ -271,72 +271,56 @@ fviz_pca_ind(
   habillage  = data_mix$cluster,  # couleur = cluster k-prototypes
   geom       = "point",
   addEllipses = TRUE,
-  title      = "Clusters K-prototypes projetés sur les 2 premières composantes PCA"
+  title      = "Clusters K-prototypes projetés sur les 2 premières composantes"
 )
 
 
 
-profil <- data_impute %>%
+
+
+# Tableau recap par cluster 
+################################################################################
+# Variables numérique
+res_num <- data_impute %>%
   group_by(cluster) %>%
   summarise(
-    n = n(),
-    montant_moyen = mean(montant, na.rm = TRUE),
-    dette_moyenne = mean(as.numeric(dette), na.rm = TRUE),
-    taux_refus = mean(est_refuse == 1),
-    taux_accord = mean(banque_accord == 1),
-    taux_encaisse = mean(est_encaisse == 1),
-    taux_risque = mean(dossier_a_risque == 1),
-    taux_frigo = mean(est_frigo == 1),
-    age_moyen = mean(age_emprunteur, na.rm = TRUE)
+    n = n(),  # 👈 nombre d'individus dans chaque cluster
+    across(
+      all_of(num_vars),
+      ~ mean(.x, na.rm = TRUE),
+      .names = "{.col}_moy"
+    )
   )
 
-profil
+res_num
 
 
+#Variables qualitatifs
+res_cat_long <- lapply(cat_vars, function(v) {
+  # table cluster × modalité
+  tab <- prop.table(table(data_impute$cluster, data_impute[[v]]), 1)  # proportions par cluster
+  
+  df <- as.data.frame(tab)
+  names(df) <- c("cluster", "modalite", "proportion")
+  df$variable <- v
+  
+  # nom de colonne final : ex "status__encaisse"
+  df$colname <- paste0(v, "__", df$modalite)
+  df
+}) %>%
+  bind_rows()
 
-
-
-
-#Visualisation inter clusters
-################################################################################
-
-centers_raw <- as.data.frame(res_kp$centers)
-
-# Identifier num vs quali AVANT conversion
-num_vars_centers <- names(which(sapply(centers_raw, is.numeric)))
-cat_vars_centers <- setdiff(names(centers_raw), num_vars_centers)
-
-types_df <- tibble(
-  variable = colnames(centers_raw),
-  type     = if_else(variable %in% num_vars_centers,
-                     "numerique", "qualitative")
-)
-
-# Tout convertir en character pour pivot_longer
-centers_char <- centers_raw %>%
-  mutate(across(everything(), as.character))
-
-# Long -> Wide : 1 ligne = 1 variable, colonnes = clusters
-centers_long <- centers_char %>%
-  rownames_to_column("cluster") %>%
-  mutate(cluster = paste0("cluster_", cluster)) %>%  # cluster_1,...,cluster_5
-  pivot_longer(
-    cols      = -cluster,
-    names_to  = "variable",
-    values_to = "valeur"
-  )
-
-centers_resume <- centers_long %>%
-  left_join(types_df, by = "variable") %>%          # ajoute la colonne "type"
+res_cat_wide <- res_cat_long %>%
+  select(cluster, colname, proportion) %>%
   pivot_wider(
-    names_from  = cluster,
-    values_from = valeur
-  ) %>%
-  select(variable, type, starts_with("cluster_")) %>%
-  arrange(type, variable)
+    names_from  = colname,
+    values_from = proportion
+  )
 
-# Aperçu
-head(centers_resume)
-centers_resume
+# Jointure des 2 
+tableau_clusters <- res_num %>%
+  left_join(res_cat_wide, by = "cluster")
+
+tableau_clusters
 
 
