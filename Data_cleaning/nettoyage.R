@@ -1,15 +1,15 @@
 library(dplyr)
 library(lubridate)
 
-load("Data_cleaning/new_data")
-data0 = data_to_umontpellier
+load("Data/new_data")
+data = data_to_umontpellier
 rm(data_to_umontpellier)
 
-load("Data_cleaning/data_to_umontpellier_new1")
+load("Data/data_to_umontpellier_new1")
 data_de_base = data_to_umontpellier
 rm(data_to_umontpellier)
 
-data_de_base <- data_de_base[, colnames(data_de_base) %in% colnames(data0)]
+data_de_base <- data_de_base[, colnames(data_de_base) %in% colnames(data)]
 
 data_non_relancer <- data_de_base %>% 
   filter(a_ete_relance == FALSE)
@@ -98,5 +98,5 @@ cols_a_supprimer <- c(
 
 data <- data %>% select(-all_of(cols_a_supprimer))
 
-save(data, file = "Data_Cleaning/data.RData")
-save(data_de_base, file = "Data_Cleaning/data_de_base.RData")
+save(data, file = "Data/data.RData")
+save(data_de_base, file = "Data/data_de_base.RData")

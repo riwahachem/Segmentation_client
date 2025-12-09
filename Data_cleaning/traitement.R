@@ -1,7 +1,7 @@
 library(dplyr)
 library(lubridate)
 
-load("Data_Cleaning/data.RData")
+load("Data/data.RData")
 
 # VARIABLES QUANTITATIVES
 data$est_aggregation <- ifelse(is.na(data$est_aggregation), 0, 1)
@@ -152,4 +152,4 @@ data <- data %>%
 data <- data %>% distinct()
 data = subset(data, select = -c(cle_unique_mail, cle_unique_tel))
 
-save(data, file = "Data_Cleaning/data_nouveau.RData")
+save(data, file = "Data/data.RData")
