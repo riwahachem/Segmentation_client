@@ -1,7 +1,7 @@
 library(dplyr)
 library(ggplot2)
-load("Data_Cleaning/data_de_base.RData")
-load("Data_Cleaning/data_nouveau.RData")
+load("Data/data_de_base.RData")
+load("Data/data.RData")
 
 #Statistiques descriptives (variables qualitatives) : 
 

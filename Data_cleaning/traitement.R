@@ -146,6 +146,9 @@ data$dette <- ifelse(
   ifelse(data$dette==0, "dette a zero", "dette existante")
 )
 
+data$coemprunteur = ifelse(is.na(data$age_coemprunteur), 0, 1)
+data$coemprunteur = as.factor(data$coemprunteur)
+
 data <- data %>%
   mutate(across(where(is.character), as.factor))
 
