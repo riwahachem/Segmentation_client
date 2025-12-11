@@ -31,6 +31,11 @@ data_loc_avec <- miss_forest_l1$ximp
 data_loc_avec = subset(data_loc_avec, select = -c(montant, duree, banque, montant_versement_annuel,
                                                     allocation_familiale, apl, nb_doc_espace_client))
 
+data_loc_avec$signature_electronique = as.factor(data_loc_avec$signature_electronique)
+int_vars <- c("nb_epargne", "nb_pret_conso","etude_partagee","nb_rdv_fait","nb_rdv_pas_fait","age_emprunteur")
+
+data_loc_avec[int_vars] <- lapply(data_loc_avec[int_vars], as.integer)
+
 # Table data_loc_sans
 load("Data/data_loc_sans.RData")
 
