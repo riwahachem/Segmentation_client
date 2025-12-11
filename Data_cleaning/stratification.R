@@ -49,7 +49,7 @@ donnees_manquantes_p2 <- colSums(is.na(data_prop_sans)) / nrow(data_prop_sans) *
 lapply(data_prop_sans, unique)
 data_prop_sans = subset(data_prop_sans, select = -c(age_coemprunteur, situation_familliale_coemprunteur, type_contrat_coemprunteur, coemprunteur))
 
-save(data_loc_avec, file = "Data/data_loc_avec.RData")
-save(data_loc_sans, file = "Data/data_loc_sans.RData")
-save(data_prop_avec, file = "Data/data_prop_avec.RData")
-save(data_prop_sans, file = "Data/data_prop_sans.RData")
+save(data_loc_avec, file = "Data/data_loc_avec_NA.RData")
+save(data_loc_sans, file = "Data/data_loc_sans_NA.RData")
+save(data_prop_avec, file = "Data/data_prop_avec_NA.RData")
+save(data_prop_sans, file = "Data/data_prop_sans_NA.RData")
