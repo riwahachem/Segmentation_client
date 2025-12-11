@@ -1,3 +1,5 @@
+library(dplyr)
+library(tidyr)
 # Profils
 load("Data/cluster_loc_avec.RData")
 data = data_loc_avec
@@ -130,4 +132,3 @@ for (i in 1:nrow(all_scores)) {
     }
   }
 }
-

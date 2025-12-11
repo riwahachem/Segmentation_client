@@ -1,25 +1,8 @@
 library(mice)
 library(missForest)
 
-# Table data
-load("Data/data.RData")
-donnees_manquantes <- colSums(is.na(data)) / nrow(data) * 100
-
-miss_forest = missForest(data, variablewise = TRUE)
-perf <- data.frame(
-  variable = colnames(data),
-  OOBerror = miss_forest$OOBerror
-)
-data_impute <- miss_forest$ximp
-
-# Suppression des variables avec plus de 90% de NA et mauvaise perf
-data_impute = subset(data_impute, select = -c(montant, duree, taux_offre, montant_versement_annuel, 
-                                              allocation_familiale, apl, nb_doc_espace_client,
-                                              banque, agence, type_contrat_coemprunteur))
-save(data_impute, file = "Data_Cleaning/data_finale.RData")
-
 # Table data_loc_avec
-load("Data/data_loc_avec.RData")
+load("Data/data_loc_avec_NA.RData")
 
 miss_forest_l1 = missForest(data_loc_avec, variablewise = TRUE)
 
@@ -37,7 +20,7 @@ int_vars <- c("nb_epargne", "nb_pret_conso","etude_partagee","nb_rdv_fait","nb_r
 data_loc_avec[int_vars] <- lapply(data_loc_avec[int_vars], as.integer)
 
 # Table data_loc_sans
-load("Data/data_loc_sans.RData")
+load("Data/data_loc_sans_NA.RData")
 
 miss_forest_l2 = missForest(data_loc_sans, variablewise = TRUE)
 perf_l2 <- data.frame(
@@ -49,7 +32,7 @@ data_loc_sans = subset(data_loc_sans, select = -c(montant, duree, banque, montan
                                                     allocation_familiale, apl, nb_doc_espace_client))
 
 # Table data_prop_avec
-load("Data/data_prop_avec.RData")
+load("Data/data_prop_avec_NA.RData")
 
 miss_forest_p1 = missForest(data_prop_avec, variablewise = TRUE)
 perf_p1 <- data.frame(
@@ -61,7 +44,7 @@ data_prop_avec = subset(data_prop_avec, select = -c(montant, duree, banque, mont
                                                     allocation_familiale, nb_doc_espace_client))
 
 # Table data_prop_sans
-load("Data/data_prop_sans.RData")
+load("Data/data_prop_sans_NA.RData")
 
 miss_forest_p2 = missForest(data_prop_sans, variablewise = TRUE)
 perf_p2 <- data.frame(
