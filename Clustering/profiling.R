@@ -1,8 +1,7 @@
 library(dplyr)
 library(tidyr)
 # Profils
-load("Data/cluster_loc_avec.RData")
-data = data_loc_avec
+load("Data/cluster_data_loc_avec.RData")
 data$cluster = factor(data$cluster)
 
 # --- 1. identifier variables qualitatives et numériques (en excluant 'cluster')
