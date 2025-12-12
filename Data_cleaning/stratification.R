@@ -23,10 +23,10 @@ data_loc_avec = data_loc[data_loc$coemprunteur == 1,]
 donnees_manquantes_l1 <- colSums(is.na(data_loc_avec)) / nrow(data_loc_avec) * 100
 lapply(data_loc_avec, unique)
 data_loc_avec$etude_partagee = ifelse(is.na(data_loc_avec$etude_partagee), 0, 1)
-data_loc$etude_partagee = as.factor(data_loc$etude_partagee)
+data_loc_avec$etude_partagee = as.factor(data_loc_avec$etude_partagee)
 
 data_loc_avec$signature_electronique = ifelse(is.na(data_loc_avec$signature_electronique), 0, 1)
-data_loc$signature_electronique = as.factor(data_loc$signature_electronique)
+data_loc_avec$signature_electronique = as.factor(data_loc_avec$signature_electronique)
 
 # etude_partagee : 0 ou NA
 # signature_electronique : 0 ou NA

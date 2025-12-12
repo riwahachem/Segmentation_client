@@ -1,14 +1,15 @@
 library(dplyr)
 library(tidyr)
+library(scales)
+
 # Profils
 load("Data/cluster_data_loc_avec.RData")
 data$cluster = factor(data$cluster)
 
-# --- 1. identifier variables qualitatives et numériques (en excluant 'cluster')
+# QUALITATIF
 qual_vars <- names(data)[sapply(data, is.factor) & names(data) != "cluster"]
-num_vars  <- names(data)[sapply(data, is.numeric) & names(data) != "cluster"]
 
-# --- 2. Table des pourcentages des modalités de toutes les variables qualitatives
+# Pourcentages des modalités du cluster
 results_qual <- data %>%
   select(cluster, all_of(qual_vars)) %>%
   pivot_longer(-cluster, names_to = "variable", values_to = "modality") %>%
@@ -19,7 +20,7 @@ results_qual <- data %>%
   ungroup() %>%
   arrange(cluster, variable, desc(pct))
 
-# --- 3. Proportions globales par modalité (pour comparaison)
+# Pourcentages des modalités de la table totale
 global_props <- data %>%
   select(all_of(qual_vars)) %>%
   pivot_longer(everything(), names_to = "variable", values_to = "modality") %>%
@@ -29,7 +30,7 @@ global_props <- data %>%
   mutate(pct_global = 100 * n_global / sum(n_global)) %>%
   ungroup()
 
-# --- 4. Calculer la différence (pct_local - pct_global)
+# Différence entre les pourcentages 
 cluster_descriptors <- results_qual %>%
   left_join(global_props %>% select(variable, modality, pct_global),
             by = c("variable", "modality")) %>%
@@ -37,9 +38,7 @@ cluster_descriptors <- results_qual %>%
          diff = pct - pct_global) %>%
   arrange(cluster, desc(diff))
 
-
-# QUALITATIF
-# --- 5. Extraire les top modalités par cluster (ici top 10, modifie si tu veux top 3)
+# Ranger les variables par cluster
 best_modalities <- cluster_descriptors %>%
   group_by(cluster) %>%
   slice_max(order_by = diff, n = 336, with_ties = FALSE) %>%
@@ -47,25 +46,28 @@ best_modalities <- cluster_descriptors %>%
   ungroup()
 best_modalities = subset(best_modalities, select=-c(n,pct_global))
 
+# QUANTITATIF
+num_vars  <- names(data)[sapply(data, is.numeric) & names(data) != "cluster"]
 
-# NUMÉRIQUES
-# --- 6. Médianes numériques par cluster (dplyr >= 1.1.0 syntaxe)
+# Médianes par cluster
 results_num_long <- data %>%
   group_by(cluster) %>%
   summarise(across(all_of(num_vars), \(x) median(x, na.rm = TRUE)), .groups = "drop") %>%
   pivot_longer(-cluster, names_to = "variable", values_to = "median_cluster")
 
-# --- 7. Médianes globales et écarts types
+# Médianes globales totale
 global_median_num <- data %>%
   select(all_of(num_vars)) %>%
   summarise(across(everything(), \(x) median(x, na.rm = TRUE))) %>%
   pivot_longer(everything(), names_to = "variable", values_to = "median_global")
 
+# Standardisation
 global_sd <- data %>%
   select(all_of(num_vars)) %>%
   summarise(across(everything(), \(x) sd(x, na.rm = TRUE))) %>%
   pivot_longer(everything(), names_to = "variable", values_to = "sd_global")
 
+# Différence entre les médianes
 num_descriptors_long <- results_num_long %>%
   left_join(global_median_num, by = "variable") %>%
   left_join(global_sd, by = "variable") %>%
@@ -73,7 +75,7 @@ num_descriptors_long <- results_num_long %>%
          abs_diff_norm = abs(diff_norm / sd_global)) %>%
   arrange(cluster, desc(abs_diff_norm))
 
-# --- 8. Top variables numériques par cluster (top 10 par défaut)
+# Ranger les variables par cluster
 best_num <- num_descriptors_long %>%
   group_by(cluster) %>%
   slice_max(order_by = abs_diff_norm, n = 336, with_ties = FALSE) %>%
@@ -81,18 +83,36 @@ best_num <- num_descriptors_long %>%
 
 best_num = subset(best_num, select=-c(median_global,sd_global))
 
+best_num <- best_num %>%
+  mutate(median_cluster = format(median_cluster, scientific = FALSE, digits = 10),
+         diff_norm = format(diff_norm, scientific = FALSE, digits = 10))
+
+# COMPARAISON QUALITATIF - QUANTITATIF
 # QUALITATIF
-qual_scores <- cluster_descriptors %>%
+cluster_counts <- data %>%
+  group_by(cluster) %>%
+  summarise(n_cluster = n(), .groups = "drop")
+
+cluster_h <- cluster_descriptors %>%
+  left_join(cluster_counts, by = "cluster") %>%
+  mutate(p_hat = pct / 100,
+         p_global = pct_global / 100,
+         # arcsine-sqrt transformation
+         asin1 = 2 * asin(pmin(pmax(sqrt(p_hat), 0), 1)),
+         asin0 = 2 * asin(pmin(pmax(sqrt(p_global), 0), 1)),
+         h = asin1 - asin0)  # signed
+
+qual_scores <- cluster_h %>%
   group_by(cluster, variable) %>%
-  summarise(score_qual = max(abs(diff)), .groups = "drop")
+  summarise(score_qual = max(abs(h), na.rm = TRUE), .groups = "drop")
 
 qual_scores <- qual_scores %>%
   rename(score = score_qual)
 
 # QUANTITATIF
 num_scores <- num_descriptors_long %>%
-  select(cluster, variable, diff_norm) %>%
-  mutate(score = abs(diff_norm)) %>%
+  select(cluster, variable, abs_diff_norm) %>%
+  mutate(score = abs_diff_norm) %>%
   select(cluster, variable, score)
 
 # TABLE FINALE
@@ -131,3 +151,6 @@ for (i in 1:nrow(all_scores)) {
     }
   }
 }
+
+all_scores <- all_scores %>%
+  mutate(score = format(score, scientific = FALSE, digits = 10))

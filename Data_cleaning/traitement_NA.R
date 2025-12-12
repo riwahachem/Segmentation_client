@@ -1,7 +1,7 @@
 library(mice)
 library(missForest)
 
-int_vars <- c("nb_epargne", "nb_pret_immo", "nb_pret_conso","etude_partagee","nb_rdv_fait","nb_rdv_pas_fait","age_emprunteur")
+int_vars <- c("nb_epargne", "nb_pret_immo", "nb_pret_conso","nb_rdv_fait","nb_rdv_pas_fait","age_emprunteur")
 
 # Table data_loc_avec
 load("Data/data_loc_avec_NA.RData")
