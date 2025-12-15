@@ -48,6 +48,7 @@ run_clustering <- function(df, ncp = 39, sub_size = 10000, k_max = 20){
     silhouette = sil
   ))
 }
+
 analyze_clusters <- function(df){
   library(dplyr)
   library(tidyr)
@@ -153,7 +154,8 @@ full_clustering_pipeline <- function(df){
     analysis = res_analysis
   ))
 }
-load("Data/data_loc_sans.RData")
+
+load("data/data_loc_sans.RData")
 result_loc_sans <- full_clustering_pipeline(data_loc_sans)
 # Afficher la médiane numérique par cluster
 print(result_loc_sans$analysis$median_num)
@@ -169,7 +171,7 @@ print(result_loc_sans$analysis$important_vars)
 result_loc_sans$analysis$resume()
 
 
-load("Data/data_loc_avec.RData")
+load("data/data_loc_avec.RData")
 result_loc_avec <- full_clustering_pipeline(data_loc_avec)
 print(result_loc_avec$analysis$median_num)
 print(result_loc_avec$analysis$median_global)
@@ -179,7 +181,7 @@ print(result_loc_avec$analysis$important_vars)
 result_loc_avec$analysis$resume()
 
 
-load("Data/data_prop_sans.RData")
+load("data/data_prop_sans.RData")
 result_prop_sans <- full_clustering_pipeline(data_prop_sans)
 print(result_prop_sans$analysis$median_num)
 print(result_prop_sans$analysis$median_global)
@@ -188,7 +190,7 @@ print(result_prop_sans$analysis$modalites)
 print(result_prop_sans$analysis$important_vars)
 result_prop_sans$analysis$resume()
 
-load("Data/data_prop_avec.RData")
+load("data/data_prop_avec.RData")
 result_prop_avec <- full_clustering_pipeline(data_prop_avec)
 print(result_prop_avec$analysis$median_num)
 print(result_prop_avec$analysis$median_global)

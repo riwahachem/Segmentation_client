@@ -1,0 +1,4 @@
+load("/Users/riwa/Documents/GitHub/Segmentation_client/Data_cleaning/data_de_base.RData")
+load("/Users/riwa/Documents/GitHub/Segmentation_client/Data_cleaning/data_de_base.RData")
+ncol(data_de_base)
+nrow(data_de_base)

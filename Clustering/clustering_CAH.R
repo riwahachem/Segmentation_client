@@ -128,10 +128,10 @@ analyse_clusters <- function(df){
 
 
 
-load("Data/data_loc_avec.RData")
-load("Data/data_loc_sans.RData")
-load("Data/data_prop_avec.RData")
-load("Data/data_prop_sans.RData")
+load("data/data_loc_avec.RData")
+load("data/data_loc_sans.RData")
+load("data/data_prop_avec.RData")
+load("data/data_prop_sans.RData")
 
 res_loc_avec  <- run_hcpc_adaptatif(data_loc_avec)
 res_loc_sans  <- run_hcpc_adaptatif(data_loc_sans)
