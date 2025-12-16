@@ -3,7 +3,7 @@ library(tidyr)
 library(scales)
 
 # Profils
-load("data/cluster_data_loc_avec.RData")
+load("data/cluster_data_loc_sans.RData")
 data$cluster = factor(data$cluster)
 
 # QUALITATIF
@@ -17,6 +17,7 @@ results_qual <- data %>%
   summarise(n = n(), .groups = "drop") %>%
   group_by(cluster, variable) %>%
   mutate(pct = 100 * n / sum(n)) %>%
+  slice_max(pct, n = 1, with_ties = FALSE) %>%
   ungroup() %>%
   arrange(cluster, variable, desc(pct))
 
@@ -35,13 +36,13 @@ cluster_descriptors <- results_qual %>%
   left_join(global_props %>% select(variable, modality, pct_global),
             by = c("variable", "modality")) %>%
   mutate(pct_global = ifelse(is.na(pct_global), 0, pct_global),
-         diff = pct - pct_global) %>%
+         diff = abs(pct - pct_global)) %>%
   arrange(cluster, desc(diff))
 
 # Ranger les variables par cluster
 best_modalities <- cluster_descriptors %>%
   group_by(cluster) %>%
-  slice_max(order_by = diff, n = 336, with_ties = FALSE) %>%
+  slice_max(order_by = diff, n = 28, with_ties = FALSE) %>%
   arrange(cluster, desc(diff)) %>%
   ungroup()
 best_modalities = subset(best_modalities, select=-c(n,pct_global))
@@ -78,7 +79,7 @@ num_descriptors_long <- results_num_long %>%
 # Ranger les variables par cluster
 best_num <- num_descriptors_long %>%
   group_by(cluster) %>%
-  slice_max(order_by = abs_diff_norm, n = 336, with_ties = FALSE) %>%
+  slice_max(order_by = abs_diff_norm, n = 11, with_ties = FALSE) %>%
   ungroup()
 
 best_num = subset(best_num, select=-c(median_global,sd_global))
