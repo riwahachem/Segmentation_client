@@ -1,11 +1,11 @@
+library(randomForest)
+library(cluster)
+library(umap)
+
 load("data/data_loc_avec.RData")
 load("data/data_loc_sans.RData")
 load("data/data_prop_avec.RData")
 load("data/data_prop_sans.RData")
-
-library(randomForest)
-library(cluster)
-library(umap)
 
 set.seed(123)
 
@@ -24,6 +24,7 @@ umap_res <- umap(1 - prox)
 coords <- umap_res$layout
 
 ################################################
+
 # Silhouette pour plusieurs k
 k_values <- 2:10
 
@@ -46,9 +47,10 @@ for (i in seq_along(k_values)) {
 
 # Résultats
 data.frame(k = k_values, silhouette = sil_means)
+
 ################################################
 
-library(cluster)
+# PAM
 pam_RF <- pam(dissRF, k = 3, diss = TRUE)
 clusters <- pam_RF$clustering
 

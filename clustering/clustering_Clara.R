@@ -145,6 +145,8 @@ analyze_clusters <- function(df){
   
   return(results)
 }
+
+
 full_clustering_pipeline <- function(df){
   res_cluster <- run_clustering(df)
   res_analysis <- analyze_clusters(res_cluster$df)

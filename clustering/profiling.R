@@ -47,6 +47,8 @@ best_modalities <- cluster_descriptors %>%
   ungroup()
 best_modalities = subset(best_modalities, select=-c(n,pct_global))
 
+#########################################################
+
 # QUANTITATIF
 num_vars  <- names(data)[sapply(data, is.numeric) & names(data) != "cluster"]
 
@@ -88,7 +90,10 @@ best_num <- best_num %>%
   mutate(median_cluster = format(median_cluster, scientific = FALSE, digits = 10),
          diff_norm = format(diff_norm, scientific = FALSE, digits = 10))
 
+#########################################################
+
 # COMPARAISON QUALITATIF - QUANTITATIF
+
 # QUALITATIF
 cluster_counts <- data %>%
   group_by(cluster) %>%
@@ -155,3 +160,14 @@ for (i in 1:nrow(all_scores)) {
 
 all_scores <- all_scores %>%
   mutate(score = format(score, scientific = FALSE, digits = 10))
+
+#########################################################
+
+# Calcul des quantiles 
+data %>%
+  filter(cluster == 6) %>%
+  summarise(
+    q1 = quantile(taux_offre, 0.25, na.rm = TRUE),
+    median = median(taux_offre, na.rm = TRUE),
+    q3 = quantile(taux_offre, 0.75, na.rm = TRUE)
+  )

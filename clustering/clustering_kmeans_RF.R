@@ -8,10 +8,10 @@ library(cluster)
 library(umap)
 
 datas <- list(
-  data_loc_avec  = data_loc_avec
-  #data_loc_sans  = data_loc_sans,
-  #data_prop_avec = data_prop_avec,
-  #data_prop_sans = data_prop_sans
+  data_loc_avec  = data_loc_avec,
+  data_loc_sans  = data_loc_sans,
+  data_prop_avec = data_prop_avec,
+  data_prop_sans = data_prop_sans
 )
 
 for(name in names(datas)){
@@ -25,7 +25,7 @@ for(name in names(datas)){
   
   umap_res <- umap(1 - rf$proximity)
   coords <- umap_res$layout
-  ################################################
+  
   # Silhouette pour plusieurs k
   k_values <- 2:20
 
@@ -50,7 +50,7 @@ for(name in names(datas)){
   # Résultats
   k_silhouette = data.frame(k = k_values, silhouette = sil_means)
 
-  ################################################
+  
   # 3. Clustering final K-means avec K_choisi
   k = k_silhouette$k[which.max(k_silhouette$silhouette)]
   if(k > 4){
