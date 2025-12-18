@@ -34,8 +34,7 @@ Segmentation_client/
 │   ├── clustering_PAM.R  
 │   └── profiling.R  
 ├── visualization/  
-│   ├── visualization_missing_values.R  
-│   ├── visualization_clusters.R  
+│   ├── visualization_missing_values.R   
 │   └── descriptive_stats.R  
 ├── .gitignore  
 └── README.md  
@@ -77,14 +76,12 @@ Les fichiers peuvent être exécutées indépendamment :
   Visualisation des données manquantes.
 - `descriptive_stats.R`  
   Statistiques descriptives globales et par cluster.
-- `visualization_clusters.R`  
-  Visualisation des caractéristiques des clusters.
   
 ---
 
 ## Auteurs
 
-- **Wahel EL-MAZZOUJI** - [wahel.el-mazzouji@etu.umontpellier.fr](mailto:wahel.el-mazzouji@etu.umontpellier.fr)
+- **Wahel EL MAZZOUJI** - [wahel.el-mazzouji@etu.umontpellier.fr](mailto:wahel.el-mazzouji@etu.umontpellier.fr)
 - **Marine GERMAIN** – [marine.germain@etu.umontpellier.fr](mailto:marine.germain@etu.umontpellier.fr)  
 - **Riwa HACHEM REDA** - [riwa.hachem-reda@etu.umontpellier.fr](mailto:riwa.hachem-reda@etu.umontpellier.fr)  
 - **Samy M'RAD** -[samy.mrad@etu.umontpellier.fr](mailto:samy.mrad@etu.umontpellier.fr)
