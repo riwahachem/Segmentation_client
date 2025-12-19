@@ -5,15 +5,15 @@ set.seed(123)
 
 # Charger les données
 load("data/data_loc_avec.RData")
-#load("data/data_loc_sans.RData")
-#load("data/data_prop_avec.RData")
-#load("data/data_prop_sans.RData")
+load("data/data_loc_sans.RData")
+load("data/data_prop_avec.RData")
+load("data/data_prop_sans.RData")
 
 datas <- list(
-  data_loc_avec  = data_loc_avec
-  #data_loc_sans  = data_loc_sans,
-  #data_prop_avec = data_prop_avec,
-  #data_prop_sans = data_prop_sans
+  data_loc_avec  = data_loc_avec,
+  data_loc_sans  = data_loc_sans,
+  data_prop_avec = data_prop_avec,
+  data_prop_sans = data_prop_sans
 )
 
 for(name in names(datas)){
