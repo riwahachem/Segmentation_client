@@ -2,20 +2,7 @@ library(FactoMineR)
 library(cluster)
 library(class)
 
-# Chargement des données
 load("data/data_loc_avec.RData")
-load("data/data_loc_sans.RData")
-load("data/data_prop_avec.RData")
-load("data/data_prop_sans.RData")
-
-# Liste des bases
-datas <- list(
-  data_loc_avec  = data_loc_avec,
-  data_loc_sans  = data_loc_sans,
-  data_prop_avec = data_prop_avec,
-  data_prop_sans = data_prop_sans
-)
-
 
 run_hcpc <- function(df, ncp = 20, max_hcpc = 20000, seed = 123){
   
@@ -65,18 +52,4 @@ run_hcpc <- function(df, ncp = 20, max_hcpc = 20000, seed = 123){
   ))
 }
 
-for(name in names(datas)){
-  
-  cat("\nHCPC :", name, "\n")
-  
-  res <- run_hcpc(datas[[name]])
-  
-  data <- res$data
-  
-  save(
-    data,
-    file = paste0("data/cluster_hcpc_", name, ".RData")
-  )
-}
-
-
+res <- run_hcpc(data_loc_avec)

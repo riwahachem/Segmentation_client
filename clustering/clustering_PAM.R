@@ -3,13 +3,9 @@ library(cluster)
 library(umap)
 
 load("data/data_loc_avec.RData")
-load("data/data_loc_sans.RData")
-load("data/data_prop_avec.RData")
-load("data/data_prop_sans.RData")
 
 set.seed(123)
 
-# Locataire avec coemprunteur 
 rf <- randomForest(data_loc_avec, 
                    ntree = 500,
                    proximity = TRUE,
